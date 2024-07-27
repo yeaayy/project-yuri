@@ -22,6 +22,7 @@ public class AdvancedDialogueManager : MonoBehaviour
     public ActorSO[] actorSO;
 
     // Button References
+    [SerializeField]
     private GameObject[] optionButton;
     private TMP_Text[] optionButtonText;
     private GameObject optionsPanel;
@@ -35,7 +36,6 @@ public class AdvancedDialogueManager : MonoBehaviour
     void Start()
     {
         // Find Buttons
-        optionButton = GameObject.FindGameObjectsWithTag("OptionButton");
         optionsPanel = GameObject.Find("OptionsPanel");
 
         if (optionsPanel == null)
@@ -166,6 +166,7 @@ public class AdvancedDialogueManager : MonoBehaviour
             currentConversation = currentConversation.option3;
 
         stepNum = 0;
+        PlayDialogue();
     }
 
     private IEnumerator TypeWriterEffect(string line)
