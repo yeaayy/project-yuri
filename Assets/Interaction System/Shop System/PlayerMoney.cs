@@ -1,12 +1,12 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class PlayerMoney : MonoBehaviour
 {
     public static PlayerMoney Instance { get; private set; }
+    public static string ChangedEvent = "PlayerMoneyChanged";
     public int playerMoney;
-    public TMP_Text walletTextMainMenu;
-    public TMP_Text walletTextShop;
 
     private void Awake()
     {
@@ -18,14 +18,9 @@ public class PlayerMoney : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
             Debug.Log("Duplicate PlayerMoney Instance destroyed.");
+            Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        UpdateMoneyText();
     }
 
     private void OnEnable()
@@ -46,13 +41,12 @@ public class PlayerMoney : MonoBehaviour
     public void AddMoney(int amount)
     {
         playerMoney += amount;
-        UpdateMoneyText();
+        EventBus.Trigger(ChangedEvent, this);
     }
 
     public void SubtractMoney(int amount)
     {
-        playerMoney -= amount;
-        UpdateMoneyText();
+        AddMoney(-amount);
     }
 
     public bool CanAfford(int amount)
@@ -60,18 +54,4 @@ public class PlayerMoney : MonoBehaviour
         return playerMoney >= amount;
     }
 
-    public void UpdateMoneyText()
-    {
-        if (walletTextMainMenu != null)
-        {
-            walletTextMainMenu.text = "Money: " + playerMoney.ToString();
-            Debug.Log("Money updated in MainMenu: " + playerMoney);
-        }
-
-        if (walletTextShop != null)
-        {
-            walletTextShop.text = "Money: " + playerMoney.ToString();
-            Debug.Log("Money updated in Shop: " + playerMoney);
-        }
-    }
 }

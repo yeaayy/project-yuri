@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class MenuController : MonoBehaviour
 {
@@ -21,12 +22,8 @@ public class MenuController : MonoBehaviour
         playerStatusPanel.SetActive(false);
         calendarPanel.SetActive(false);
 
-        var playerMoney = PlayerMoney.Instance;
-        if (playerMoney != null)
-        {
-            playerMoney.walletTextMainMenu = walletTextMainMenu;
-            playerMoney.UpdateMoneyText();
-        }
+        this.UpdateMoneyText(PlayerMoney.Instance);
+        EventBus.Register<PlayerMoney>(PlayerMoney.ChangedEvent, this.UpdateMoneyText);
 
         menuUI.SetActive(false); // Deactivate the menu if needed
     }
@@ -56,7 +53,6 @@ public class MenuController : MonoBehaviour
 
         if (isMenuActive)
         {
-            PlayerMoney.Instance.UpdateMoneyText();
             UpdateProtagonistPortrait();
             UpdateCurrentWeaponIcon();
         }
@@ -178,5 +174,10 @@ public class MenuController : MonoBehaviour
     {
         Sprite weaponSprite = WeaponManager.Instance.GetCurrentWeaponSprite();
         currentWeaponIcon.GetComponent<UnityEngine.UI.Image>().sprite = weaponSprite;
+    }
+
+    private void UpdateMoneyText(PlayerMoney playerMoney)
+    {
+        walletTextMainMenu.text = "Money: " + playerMoney.playerMoney.ToString();
     }
 }

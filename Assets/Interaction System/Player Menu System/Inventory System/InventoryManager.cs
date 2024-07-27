@@ -88,7 +88,7 @@ public class InventoryManager : MonoBehaviour
             slot = null;
         }
         this.activeSlot = slot;
-        if (slot == null)
+        if (slot == null || slot.item == null)
         {
             itemDescriptionNameText.text = null;
             itemDescriptionText.text = null;

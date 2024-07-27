@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ShopTrigger : MonoBehaviour
@@ -37,19 +38,6 @@ public class ShopTrigger : MonoBehaviour
         if (open)
         {
             Debug.Log("Shop UI opened.");
-
-            // Transfer necessary references or data to the shop UI here if needed
-            var playerMoney = PlayerMoney.Instance;
-            if (playerMoney != null)
-            {
-                playerMoney.walletTextShop = FindObjectOfType<ShopManager>().walletTextShop;
-                playerMoney.UpdateMoneyText();
-                Debug.Log("PlayerMoney Instance found and money text updated.");
-            }
-            else
-            {
-                Debug.LogError("PlayerMoney Instance not found when opening Shop UI.");
-            }
         }
         else
         {

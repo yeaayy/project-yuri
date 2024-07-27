@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class ShopManager : MonoBehaviour
 {
@@ -14,14 +15,8 @@ public class ShopManager : MonoBehaviour
     {
         // Deactivate shop panel initially
         gameObject.SetActive(false);
-
-        var playerMoney = PlayerMoney.Instance;
-        if (playerMoney != null)
-        {
-            playerMoney.walletTextShop = walletTextShop;
-            playerMoney.UpdateMoneyText();
-            Debug.Log("PlayerMoney initialized and money text updated.");
-        }
+        UpdateMoneyText(PlayerMoney.Instance);
+        EventBus.Register<PlayerMoney>(PlayerMoney.ChangedEvent, this.UpdateMoneyText);
 
         itemDetailsUI.SetShopManager(this);
     }
@@ -73,11 +68,15 @@ public class ShopManager : MonoBehaviour
         {
             PlayerMoney.Instance.SubtractMoney(totalCost);
             inventoryManager.AddItem(item, quantity);
-            PlayerMoney.Instance.UpdateMoneyText();
         }
         else
         {
             Debug.Log("Not enough money to purchase item.");
         }
+    }
+
+    private void UpdateMoneyText(PlayerMoney playerMoney)
+    {
+        walletTextShop.text = "Money: " + playerMoney.playerMoney.ToString();
     }
 }
